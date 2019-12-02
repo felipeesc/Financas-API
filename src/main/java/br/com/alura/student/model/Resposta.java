@@ -27,6 +27,10 @@ public class Resposta {
         return id != null ? id.equals(resposta.id) : resposta.id == null;
     }
 
+    public Resposta(){
+
+    }
+
     @Override
     public int hashCode() {
         return id != null ? id.hashCode() : 0;

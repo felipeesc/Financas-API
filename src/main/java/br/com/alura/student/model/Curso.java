@@ -14,10 +14,6 @@ public class Curso {
     private String nome;
     private String categoria;
 
-    public Curso(String spring, String programacao) {
-
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
