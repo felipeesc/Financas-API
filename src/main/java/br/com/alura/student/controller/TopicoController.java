@@ -7,6 +7,8 @@ import br.com.alura.student.model.dto.TopicoDto;
 import br.com.alura.student.model.dto.TopicoForm;
 import br.com.alura.student.service.TopicoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -27,6 +29,7 @@ public class TopicoController {
     private TopicoService topicoService;
 
     @GetMapping
+    @Cacheable(value = "listaDeTopicos")
     public Page<TopicoDto> lista(@RequestParam(required = false) String nomeCurso,
                                  @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable paginacao) {
         Page<TopicoDto> topicos = topicoService.listaTopicos(nomeCurso, paginacao);
@@ -35,6 +38,7 @@ public class TopicoController {
 
     @PostMapping
     @Transactional
+    @CacheEvict(value = "listaDeTopicos", allEntries = true)
     public ResponseEntity<TopicoDto> cadastrar(@RequestBody @Valid TopicoForm topicoForm, UriComponentsBuilder builder){
         Topico cadastrar = topicoService.cadastrar(topicoForm);
         URI uri = builder.path("/topicos/{id}").buildAndExpand(cadastrar.getId()).toUri();
@@ -48,6 +52,7 @@ public class TopicoController {
 
     @PutMapping("/{id}")
     @Transactional
+    @CacheEvict(value = "listaDeTopicos", allEntries = true)
     public ResponseEntity<TopicoDto> atualizar(@PathVariable Long id, @RequestBody @Valid AtualizacaoTopicoForm form){
         Topico topico = topicoService.atualizaTopico(id, form);
         return ResponseEntity.ok(new TopicoDto(topico));
@@ -55,6 +60,7 @@ public class TopicoController {
 
     @DeleteMapping("/{id}")
     @Transactional
+    @CacheEvict(value = "listaDeTopicos", allEntries = true)
     public ResponseEntity<?> remover(@PathVariable Long id){
         topicoService.removendo(id);
         return ResponseEntity.ok().build();
