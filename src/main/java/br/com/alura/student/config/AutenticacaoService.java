@@ -1,6 +1,7 @@
 package br.com.alura.student.config;
 
 import br.com.alura.student.model.Usuario;
+import br.com.alura.student.model.dto.LoginForm;
 import br.com.alura.student.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,5 +26,6 @@ public class AutenticacaoService implements UserDetailsService {
         }
         throw new UsernameNotFoundException("Dados invalidos");
     }
+
 }
 
